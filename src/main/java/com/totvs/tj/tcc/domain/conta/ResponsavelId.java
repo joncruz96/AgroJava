@@ -12,7 +12,7 @@ public class ResponsavelId {
     private String value;
 
     /**
-     * Retorna o valor raiz do códito.
+     * Retorna o valor raiz do código.
      */
     @Override
     public String toString() {

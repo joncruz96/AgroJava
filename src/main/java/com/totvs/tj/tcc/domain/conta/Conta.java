@@ -21,17 +21,16 @@ public class Conta {
     private Situacao situacao;
     
     private final double maximoLimite = 15000;
-    
-    private double saldo;
-    
+      
     private final double limite;
+
+    private double saldoAlocado = 0;
     
     private Conta(Builder builder) {
         this.id = builder.id;
         this.empresa  = Objects.requireNonNull(builder.empresa);
         this.gerente  = Objects.requireNonNull(builder.gerente);
         this.situacao = Objects.requireNonNull(builder.situacao);
-        this.saldo    = builder.saldo;
         this.limite   = builder.limite;
     }
     
@@ -48,7 +47,14 @@ public class Conta {
         return ABERTO.equals(situacao);
     }
     
-    
+    public boolean isLimiteParaOMovimento(double valorMovimento) {
+        // TODO Auto-generated method stub
+        if(valorMovimento > (this.limite - this.saldoAlocado)) {
+            return false;
+        }else {
+            return true;
+        }            
+    }     
     
    
     public static class Builder {
@@ -62,7 +68,6 @@ public class Conta {
         private Situacao situacao;
         private final double maximoLimite = 15000;
         
-        private double saldo;
         private double limite;
 
         public Builder id(ContaId id) {
@@ -90,7 +95,6 @@ public class Conta {
         }
 
         public Conta buildAsNew() {
-            this.saldo = 0;
             this.situacao = Situacao.ABERTO;
             this.limite = getLimiteInicial();
             return this.build();
@@ -116,4 +120,6 @@ public class Conta {
         ABERTO, SUSPENSO;
         
     }
+
+    
 }

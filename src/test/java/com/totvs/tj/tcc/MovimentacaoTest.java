@@ -1,11 +1,13 @@
 package com.totvs.tj.tcc;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import com.totvs.tj.tcc.domain.conta.Conta;
@@ -15,10 +17,13 @@ import com.totvs.tj.tcc.domain.conta.Empresa;
 import com.totvs.tj.tcc.domain.conta.EmpresaId;
 import com.totvs.tj.tcc.domain.conta.Gerente;
 import com.totvs.tj.tcc.domain.conta.GerenteId;
+import com.totvs.tj.tcc.domain.conta.Movimento;
+import com.totvs.tj.tcc.domain.conta.MovimentoId;
 import com.totvs.tj.tcc.domain.conta.Responsavel;
 import com.totvs.tj.tcc.domain.conta.ResponsavelId;
+import com.totvs.tj.tcc.domain.conta.TipoMovimento;
 
-public class ContaTest {
+public class MovimentacaoTest {
 
     private final ContaId idConta = ContaId.generate();
 
@@ -32,87 +37,120 @@ public class ContaTest {
     
     private final int numerosDeFuncionariosNormal = 12;
     
-    private final double valorMercadoEmpresaLimite = 10000.00;
+    private final MovimentoId idMovimento = MovimentoId.generate();
     
-    private final int numerosDeFuncionariosLimite = 12;
+    private final double valorMovimento = 120.00;
     
-
-    @Test
-    public void aoCriarUmaConta() throws Exception {
-
-        // WHEN
+    private final double valorExcedente = 100000.00;
+        
+    private Gerente gerente;
+    
+    private Empresa empresa;
+    
+    @Before
+    public void setup() {
+        
         Responsavel responsavel = Responsavel.builder()
                 .id(idResponsavel)           
             .build();
         
-        Gerente gerente = Gerente.builder()
+        this.gerente = Gerente.builder()
                 .id(idGerente)
                 .build();
         
-        Empresa empresa = Empresa.builder()
+        this.empresa = Empresa.builder()
                 .id(idEmpresa)
                 .responsavel(responsavel)
                 .numerosDeFuncionarios(numerosDeFuncionariosNormal)
                 .valorMercadoEmpresa(valorMercadoEmpresaNormal)
-            .build();
-        
-        Conta conta = Conta.builder()
-                .id(idConta)
-                .empresa(empresa)
-                .gerente(gerente)
-            .buildAsNew();
-
-        // THEN
-        assertNotNull(conta);
-        
-        assertEquals(idConta, conta.getId());
-        assertEquals(empresa, conta.getEmpresa());
-        assertEquals(gerente, conta.getGerente());
-        assertEquals(numerosDeFuncionariosNormal * valorMercadoEmpresaNormal, conta.getLimite(), 0);
-        
-        assertEquals(idConta.toString(), conta.getId().toString());
-        assertEquals(empresa.toString(), conta.getEmpresa().toString());
-        assertEquals(gerente.toString(), conta.getGerente().toString());
+            .build();       
+ 
     }
     
     @Test
-    public void aoCriarUmaContaLimiteMaximo() throws Exception {
+    public void aoCriarUmMovimento() throws Exception {
 
-        // WHEN
-        Responsavel responsavel = Responsavel.builder()
-                .id(idResponsavel)           
-            .build();
-        
-        Gerente gerente = Gerente.builder()
-                .id(idGerente)
-                .build();
-        
-        Empresa empresa = Empresa.builder()
-                .id(idEmpresa)
-                .responsavel(responsavel)
-                .numerosDeFuncionarios(numerosDeFuncionariosLimite)
-                .valorMercadoEmpresa(valorMercadoEmpresaLimite)
-            .build();
-        
+        // given
         Conta conta = Conta.builder()
                 .id(idConta)
                 .empresa(empresa)
                 .gerente(gerente)
             .buildAsNew();
-
-        // THEN
-        assertNotNull(conta);
+                     
+        Movimento movimento = Movimento.builder()
+                .id(idMovimento)
+                .conta(conta)
+                .tipo(TipoMovimento.EMPRESTIMO)
+                .valorMovimento(valorMovimento)
+            .build();
         
-        assertEquals(idConta, conta.getId());
-        assertEquals(empresa, conta.getEmpresa());
-        assertEquals(gerente, conta.getGerente());
-        assertEquals(conta.getMaximoLimite(), conta.getLimite(), 0);
-
-        assertEquals(idConta.toString(), conta.getId().toString());
-        assertEquals(empresa.toString(), conta.getEmpresa().toString());
-        assertEquals(gerente.toString(), conta.getGerente().toString());
+     // THEN
+        
+        
+        //assertTrue(conta.isLimiteParaOMovimento(valorMovimento));
+                        
     }
+    
+    @Test
+    public void aoCriarUmMovimentoSemLimite() throws Exception {
 
+        // WHEN
+        Conta conta = Conta.builder()
+                .id(idConta)
+                .empresa(empresa)
+                .gerente(gerente)
+            .buildAsNew();
+        
+        // THEN
+        assertFalse(conta.isLimiteParaOMovimento(valorExcedente));
+                                
+    }
+    
+    @Test
+    public void aoCriarUmMovimentoComContaSuspensa() throws Exception {
+
+        // WHEN
+        Conta conta = Conta.builder()
+                .id(idConta)
+                .empresa(empresa)
+                .gerente(gerente)
+            .buildAsNew();
+        
+               
+       assertFalse(conta.isDisponivel());                  
+                                
+    }
+    
+    @Test
+    public void aoCriarUmMovimentoComAprovacao() throws Exception {
+
+        // WHEN
+        Conta conta = Conta.builder()
+                .id(idConta)
+                .empresa(empresa)
+                .gerente(gerente)
+            .buildAsNew();
+       
+        
+        Movimento movimento = Movimento.builder()
+                .id(idMovimento)
+                .conta(conta)
+                .tipo(TipoMovimento.EMPRESTIMO)
+                .valorMovimento(valorMovimento)
+            .build();
+        
+     // THEN
+        assertNotNull(movimento);
+        
+        
+        assertTrue(conta.isLimiteParaOMovimento(valorMovimento));
+                  
+                                
+    }
+    
+    
+    
+   
     /*
    @Test
     public void aoSolicitarAberturaConta() throws Exception {
@@ -143,7 +181,7 @@ public class ContaTest {
         // THEN
         assertNotNull(idConta);
     }
-
+/*
     @Test
     public void supenderUmaContaExistente() throws Exception {
 

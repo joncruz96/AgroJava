@@ -21,8 +21,7 @@ public class ContaApplicationService {
        
         Conta conta = Conta.builder()
                 .id(idConta)
-                .empresa(cmd.getEmpresa())
-                .responsavel(cmd.getResponsavel())
+                .empresa(cmd.getEmpresa())                
             .build();
         
         repository.save(conta);
