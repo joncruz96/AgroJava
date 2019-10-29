@@ -15,8 +15,6 @@ public class Movimento {
     
     private MovimentoId id;
     
-    private Conta conta;
-    
     private TipoMovimento tipo;
     
     private double valorMovimento;

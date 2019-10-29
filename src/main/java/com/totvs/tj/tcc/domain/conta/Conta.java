@@ -3,6 +3,8 @@ package com.totvs.tj.tcc.domain.conta;
 import static com.totvs.tj.tcc.domain.conta.Conta.Situacao.ABERTO;
 import static com.totvs.tj.tcc.domain.conta.Conta.Situacao.SUSPENSO;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import lombok.Getter;
@@ -25,6 +27,7 @@ public class Conta {
     private final double limite;
 
     private double saldoAlocado = 0;
+    private List<Movimento> movimentos;
     
     private Conta(Builder builder) {
         this.id = builder.id;
@@ -32,8 +35,12 @@ public class Conta {
         this.gerente  = Objects.requireNonNull(builder.gerente);
         this.situacao = Objects.requireNonNull(builder.situacao);
         this.limite   = builder.limite;
+        this.movimentos = builder.movimentos;
     }
     
+    public void addMovimento(Movimento movimento) {
+        this.movimentos.add(movimento);
+    }
 
     public static Builder builder() {
         return new Builder();
@@ -41,6 +48,16 @@ public class Conta {
         
     public void suspender() {
         situacao = SUSPENSO;
+    }
+    
+    public void debitar(Movimento movimento) {
+        saldoAlocado += movimento.getValorMovimento();
+        this.addMovimento(movimento);
+    }
+    
+    public void creditar(Movimento movimento) {
+        saldoAlocado -= movimento.getValorMovimento();
+        this.addMovimento(movimento);
     }
 
     public boolean isDisponivel() {
@@ -69,6 +86,8 @@ public class Conta {
         private final double maximoLimite = 15000;
         
         private double limite;
+        
+        private List<Movimento> movimentos;
 
         public Builder id(ContaId id) {
             this.id = id;
@@ -90,6 +109,11 @@ public class Conta {
             return this;
         }
         
+        public Builder movimentos(ArrayList<Movimento> movimentos) {
+            this.movimentos = movimentos;
+            return this;
+        }
+        
         public Conta build() {
             return new Conta(this);
         }
@@ -97,6 +121,7 @@ public class Conta {
         public Conta buildAsNew() {
             this.situacao = Situacao.ABERTO;
             this.limite = getLimiteInicial();
+            this.movimentos = new ArrayList<>();
             return this.build();
         }
         
@@ -120,6 +145,9 @@ public class Conta {
         ABERTO, SUSPENSO;
         
     }
+
+
+    
 
     
 }
