@@ -15,29 +15,30 @@ import lombok.ToString;
 public class Conta {
 
     private ContaId id;
-    
+
     private Empresa empresa;
-    
+
     private Gerente gerente;
 
     private Situacao situacao;
-    
-    private final double maximoLimite = 15000;
-      
-    private final double limite;
 
-    private double saldoAlocado = 0;
-    private List<Movimento> movimentos;
+    private final double maximoLimite = 15000;
+
+    private final double limite;
     
+    private double saldoAlocado = 0;
+
+    private List<Movimento> movimentos;
+
     private Conta(Builder builder) {
         this.id = builder.id;
-        this.empresa  = Objects.requireNonNull(builder.empresa);
-        this.gerente  = Objects.requireNonNull(builder.gerente);
+        this.empresa = Objects.requireNonNull(builder.empresa);
+        this.gerente = Objects.requireNonNull(builder.gerente);
         this.situacao = Objects.requireNonNull(builder.situacao);
-        this.limite   = builder.limite;
+        this.limite = builder.limite;
         this.movimentos = builder.movimentos;
     }
-    
+
     public void addMovimento(Movimento movimento) {
         this.movimentos.add(movimento);
     }
@@ -45,16 +46,16 @@ public class Conta {
     public static Builder builder() {
         return new Builder();
     }
-        
+
     public void suspender() {
         situacao = SUSPENSO;
     }
-    
+
     public void debitar(Movimento movimento) {
         saldoAlocado += movimento.getValorMovimento();
         this.addMovimento(movimento);
     }
-    
+
     public void creditar(Movimento movimento) {
         saldoAlocado -= movimento.getValorMovimento();
         this.addMovimento(movimento);
@@ -63,30 +64,34 @@ public class Conta {
     public boolean isDisponivel() {
         return ABERTO.equals(situacao);
     }
-    
+
     public boolean isLimiteParaOMovimento(double valorMovimento) {
         // TODO Auto-generated method stub
-        if(valorMovimento > (this.limite - this.saldoAlocado)) {
+        if (valorMovimento > (this.limite - this.saldoAlocado)) {
             return false;
-        }else {
+        } else {
             return true;
-        }            
-    }     
-    
-   
+        }
+    }
+
+    public double getCreditoEmergencial() {
+        return this.limite * 0.50;
+    }
+
     public static class Builder {
 
         private ContaId id;
-        
+
         private Empresa empresa;
-        
+
         private Gerente gerente;
 
         private Situacao situacao;
+
         private final double maximoLimite = 15000;
-        
+
         private double limite;
-        
+
         private List<Movimento> movimentos;
 
         public Builder id(ContaId id) {
@@ -108,12 +113,12 @@ public class Conta {
             this.situacao = situacao;
             return this;
         }
-        
+
         public Builder movimentos(ArrayList<Movimento> movimentos) {
             this.movimentos = movimentos;
             return this;
         }
-        
+
         public Conta build() {
             return new Conta(this);
         }
@@ -124,30 +129,21 @@ public class Conta {
             this.movimentos = new ArrayList<>();
             return this.build();
         }
-        
-        public double getLimiteInicial() {        
-            if (isLimiteMaximo())
-               return this.maximoLimite;
-            
+
+        public double getLimiteInicial() {
+            if (empresa.getNumerosDeFuncionarios() * empresa.getValorMercadoEmpresa() > this.maximoLimite)
+                return this.maximoLimite;
+
             return empresa.getNumerosDeFuncionarios() * empresa.getValorMercadoEmpresa();
         }
         
-        public boolean isLimiteMaximo() {
-           if (empresa.getNumerosDeFuncionarios() * empresa.getValorMercadoEmpresa() > this.maximoLimite)
-               return true;
-           return false;
-        }
-        
     }
-    
+
     static enum Situacao {
 
-        ABERTO, SUSPENSO;
-        
+        ABERTO,
+        SUSPENSO;
+
     }
 
-
-    
-
-    
 }

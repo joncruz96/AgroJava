@@ -78,8 +78,7 @@ public class MovimentacaoTest {
             .buildAsNew();
                      
         Movimento movimento = Movimento.builder()
-                .id(idMovimento)
-                .conta(conta)
+                .id(idMovimento)          
                 .tipo(TipoMovimento.EMPRESTIMO)
                 .valorMovimento(valorMovimento)
             .build();
@@ -134,7 +133,6 @@ public class MovimentacaoTest {
         
         Movimento movimento = Movimento.builder()
                 .id(idMovimento)
-                .conta(conta)
                 .tipo(TipoMovimento.EMPRESTIMO)
                 .valorMovimento(valorMovimento)
             .build();
