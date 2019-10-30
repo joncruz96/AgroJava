@@ -1,18 +1,27 @@
 package com.totvs.tj.tcc.domain.conta;
 
-import static com.totvs.tj.tcc.domain.conta.Conta.Situacao.ABERTO;
-import static com.totvs.tj.tcc.domain.conta.Conta.Situacao.SUSPENSO;
+import static lombok.AccessLevel.PRIVATE;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
 @Getter
 @ToString
+@Builder()
+@AllArgsConstructor(access = PRIVATE)
 public class Conta {
+    
+    private final double maximoLimite = 15000;
+
+    private final double limite;
+    
+    private double saldoAlocado;    
+
+}
+
+/*public class Conta {
 
     private ContaId id;
 
@@ -52,6 +61,11 @@ public class Conta {
     }
 
     public void debitar(Movimento movimento) {
+        
+        if (!isLimiteParaOMovimento(movimento.getValorMovimento())) {
+            throw new IllegalArgumentException("Não existe saldo para efetuar o movimento.");
+        }
+        
         saldoAlocado += movimento.getValorMovimento();
         this.addMovimento(movimento);
     }
@@ -139,11 +153,6 @@ public class Conta {
         
     }
 
-    static enum Situacao {
+   
 
-        ABERTO,
-        SUSPENSO;
-
-    }
-
-}
+}*/

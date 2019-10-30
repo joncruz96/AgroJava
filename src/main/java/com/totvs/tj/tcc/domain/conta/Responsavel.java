@@ -13,8 +13,7 @@ import lombok.ToString;
 @AllArgsConstructor(access = PRIVATE)
 public class Responsavel {
     
-    private ResponsavelId id;
-    
-    private final TipoPessoa tipoPessoa = TipoPessoa.FISICA ;
-    
+    private String cpf;
+    private String nome;
+      
 }

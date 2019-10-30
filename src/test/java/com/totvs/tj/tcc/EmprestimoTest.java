@@ -45,6 +45,8 @@ public class EmprestimoTest {
     private final double valorMovimento = 120.00;
     private final double valorDevolvido = 100.00;
     
+    private final double valorMovimentoAcimaLimite = 120000.00;
+    
     @Before
     public void setup() {
         
@@ -108,6 +110,42 @@ public class EmprestimoTest {
          // THEN
          assertEquals(valorMovimento - valorDevolvido, conta.getSaldoAlocado(), 0);
      }
+    
+
+    @Test(expected = IllegalArgumentException.class)
+    public void aoSolicitarEmprestimoSemSalfo() throws Exception {
+
+         // GIVEN
+        Conta conta = Conta.builder()
+                .id(idConta)
+                .empresa(empresa)
+                .gerente(gerente)
+            .buildAsNew();
+        
+        Movimento movimentoDebito = Movimento.builder()
+                .id(idMovimento)
+                .tipo(TipoMovimento.EMPRESTIMO)
+                .valorMovimento(valorMovimentoAcimaLimite)
+            .build();
+     
+        
+        DebitarContaCommand cmdDebito          = DebitarContaCommand.builder()
+                                                .conta(conta)
+                                                .movimento(movimentoDebito)
+                                                .build();
+        
+       
+                                                        
+         ContaRepository repository      = new ContaRepositoryMock();
+         ContaApplicationService service = new ContaApplicationService(repository);
+
+         // WHEN
+         service.handle(cmdDebito);
+     
+
+         // THEN
+         //assertTrue("Não deve terminar a execução.", false);
+    }
     
     static class ContaRepositoryMock implements ContaRepository {
 
