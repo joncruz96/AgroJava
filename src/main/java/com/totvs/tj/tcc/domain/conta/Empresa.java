@@ -29,6 +29,8 @@ public class Empresa {
 
     private Situacao situacao;
     
+    private final double maximoLimite = 15000;
+    
     private Empresa(Builder builder) {
         this.id = builder.id;
         this.responsavel = Objects.requireNonNull(builder.responsavel);
@@ -42,6 +44,30 @@ public class Empresa {
     public static Builder builder() {
         return new Builder();
     }
+    
+    public double getContaLimite() {
+        return this.conta.getLimite();
+    }
+    
+    public double getContaSaldo() {
+        return this.conta.getSaldoAlocado();
+    }
+    
+    public boolean isSupensa() {
+        if (this.situacao.equals(Situacao.SUSPENSO))
+            return true;
+        
+        return false;
+    }
+    
+    public double getLimite() {
+        return this.conta.getLimite();
+    }
+    
+    public double getSaldoAlocado() {
+        return this.getContaSaldo();
+    }
+
 
     static class Builder {
 
@@ -58,6 +84,7 @@ public class Empresa {
         private int numerosDeFuncionarios;
 
         private Situacao situacao;
+        
         private final double maximoLimite = 15000;
         
 
@@ -111,15 +138,10 @@ public class Empresa {
             return this.numerosDeFuncionarios * this.valorMercadoEmpresa;
         }
         
-        public double getContaLimite() {
-            return this.conta.getLimite();
-        }
         
-        public double getContaSaldo() {
-            return this.conta.getSaldoAlocado();
-        }
-
     }
+
+
 
     static enum Situacao {
         ABERTO,

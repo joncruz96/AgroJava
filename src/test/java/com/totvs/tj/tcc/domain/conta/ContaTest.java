@@ -3,7 +3,13 @@ package com.totvs.tj.tcc.domain.conta;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import org.junit.Test;
+
+import com.totvs.tj.tcc.app.AbrirContaCommand;
+import com.totvs.tj.tcc.app.EmpresaApplicationService;
 
 
 public class ContaTest {
@@ -26,7 +32,7 @@ public class ContaTest {
     @Test
     public void aoCriarUmaContaParaEmpresa() throws Exception {
 
-        // WHEN
+        // GIVEN
         Responsavel responsavel = Responsavel.builder()
                 .cpf(cpfResponsavel)
                 .nome(nomeResponsavel)
@@ -40,11 +46,25 @@ public class ContaTest {
                 .valorMercadoEmpresa(valorMercadoEmpresaNormal)
             .buildAsNew();
         
-        // THEN
-        assertNotNull(empresa);
+        EmpresaRepository repository        = new EmpresaRepositoryMock();
+        EmpresaApplicationService service   = EmpresaApplicationService.builder()
+                .repository(repository).build();
+        AbrirContaCommand cmd = AbrirContaCommand.builder()
+                .empresa(empresa)
+                .build();
         
-        assertEquals(idEmpresa, empresa.getId());
-        assertEquals(responsavel, empresa.getResponsavel());
+        //WHEN
+        EmpresaId empresaId = service.handle(cmd);
+        Empresa empresaSaved = repository.getOne(empresaId);
+        
+        // THEN 
+        assertNotNull(empresaId);
+        assertNotNull(empresaSaved);
+        
+        assertEquals(empresaId, empresaSaved.getId());
+        assertEquals(responsavel, empresaSaved.getResponsavel());
+        assertEquals(valorMercadoEmpresaNormal * numerosDeFuncionariosLimite, empresaSaved.getContaLimite(), 0);
+        assertEquals(0, empresaSaved.getContaSaldo(), 0);
         
 
     }
@@ -52,7 +72,7 @@ public class ContaTest {
     @Test
     public void aoCriarUmaContaParaEmpresaComLimiteMaximo() throws Exception {
 
-        // WHEN
+        // GIVEN
         Responsavel responsavel = Responsavel.builder()
                 .cpf(cpfResponsavel)
                 .nome(nomeResponsavel)
@@ -66,12 +86,25 @@ public class ContaTest {
                 .valorMercadoEmpresa(valorMercadoEmpresaLimite)
             .buildAsNew();
         
+        EmpresaRepository repository        = new EmpresaRepositoryMock();
+        EmpresaApplicationService service   = EmpresaApplicationService.builder()
+                .repository(repository).build();
+        AbrirContaCommand cmd = AbrirContaCommand.builder()
+                .empresa(empresa)
+                .build();
+        
+        //WHEN
+        EmpresaId empresaId = service.handle(cmd);
+        Empresa empresaSaved = repository.getOne(empresaId);
+       
         // THEN
-        assertNotNull(empresa);
+        assertNotNull(empresaId);
+        assertNotNull(empresaSaved);
         
-        assertEquals(idEmpresa, empresa.getId());
-        assertEquals(responsavel, empresa.getResponsavel());
-        
+        assertEquals(empresaId, empresaSaved.getId());
+        assertEquals(responsavel, empresaSaved.getResponsavel());
+        assertEquals(empresaSaved.getMaximoLimite(), empresaSaved.getContaLimite(), 0);
+        assertEquals(0, empresaSaved.getContaSaldo(), 0);
 
     }
     
@@ -145,20 +178,20 @@ public class ContaTest {
         assertTrue("Não deve chegar aqui...", false);
     }
      */
-    /*
-    static class ContaRepositoryMock implements ContaRepository {
+   
+    static class EmpresaRepositoryMock implements EmpresaRepository {
 
-        private final Map<ContaId, Conta> contas = new LinkedHashMap<>();
+        private final Map<EmpresaId, Empresa> empresas = new LinkedHashMap<>();
 
         @Override
-        public void save(Conta conta) {
-            contas.put(conta.getId(), conta);
+        public void save(Empresa empresa) {
+            empresas.put(empresa.getId(), empresa);
         }
 
         @Override
-        public Conta getOne(ContaId id) {
-            return contas.get(id);
+        public Empresa getOne(EmpresaId id) {
+            return empresas.get(id);
         }
     }
-    */
+    
 }
