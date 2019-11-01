@@ -33,8 +33,18 @@ public class EmpresaApplicationService {
         
         return empresa.getId();
     }
+    
+    public void handle(LimiteEmergencialCommand cmd) {
+        
+        Empresa empresa = repository.getOne(cmd.getEmpresaId());
+        
+        empresa.adicionarLimiteEmergencial(cmd.getValorEmergencial());
+        
+        repository.update(empresa);                
+    }
+        
    /*
-    public void handle(SuspenderContaCommand cmd) {
+    public void handle(SuspenderEmpresaCommand cmd) {
         
         Conta conta = repository.getOne(cmd.getConta());
         

@@ -179,11 +179,17 @@ public class ContaTest {
         @Override
         public void save(Empresa empresa) {
             empresas.put(empresa.getId(), empresa);
-        }
+        }       
+        
 
         @Override
         public Empresa getOne(EmpresaId id) {
             return empresas.get(id);
+        }
+
+        @Override
+        public void update(Empresa empresa) {
+            empresas.replace(empresa.getId(), empresa);
         }
     }
     
