@@ -21,8 +21,7 @@ public class EmprestimoApplicationService {
     public EmprestimoId handle(SolicitarEmprestimoCommand cmd) {
         Emprestimo emprestimo = cmd.getEmprestimo();
        
-        emprestimo.verificarEmprestimoEmpresaSuspensa();
-        emprestimo.verificarLimite();       
+        emprestimo.solicitarLiberacaoEmprestimo();                    
         
         repository.save(emprestimo);
         

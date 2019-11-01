@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import com.totvs.tj.tcc.app.EmprestimoApplicationService;
 import com.totvs.tj.tcc.app.SolicitarEmprestimoCommand;
+import com.totvs.tj.tcc.domain.conta.Emprestimo.SituacaoEmprestimo;
 
 public class EmprestimoTest {
 
@@ -54,6 +55,7 @@ public class EmprestimoTest {
                 .empresa(empresa)
                 .id(idEmprestimo)
                  .valor(valorEmprestimo)
+                 .situacao(SituacaoEmprestimo.PENDENTE)
                  .build();
 
         EmprestimoRepository repository        = new EmprestimoRepositoryMock();

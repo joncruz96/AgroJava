@@ -17,24 +17,48 @@ public class Emprestimo {
     private Empresa empresa;
     private SituacaoEmprestimo situacao;
     private double valor;
-
-    public void verificarEmprestimoEmpresaSuspensa() {
-        if (this.empresa.isSupensa())
-            this.situacao = SituacaoEmprestimo.REPROVADO;
+    private final double porcentagemAprovacaoGerente = 25;
+    
+    
+    public void reprovar() {
+        this.situacao = SituacaoEmprestimo.REPROVADO;
     }
     
-    public void verificarLimite() {
-        if (this.empresa.getLimite() > this.valor)
-            this.situacao = SituacaoEmprestimo.SEM_LIMITE_DISPONIVEL;
-
-     }
+    public void semLimiteDisponivel() {
+        this.situacao = SituacaoEmprestimo.SEM_LIMITE_DISPONIVEL;
+    }
+    
+    public void aguardarAprovacao() {
+        this.situacao = SituacaoEmprestimo.AGUARDANDO_APROVACAO;
+    }  
+    
+    public void liberarEmprestimo() {
+        this.situacao = SituacaoEmprestimo.LIBERADO;
+    }
+    
+    public double getValorMaximoSemAprovacaoGerente() {
+        return empresa.getLimite() * (porcentagemAprovacaoGerente/100);
+    }
+    
+    public void solicitarLiberacaoEmprestimo() {
+        if(empresa.isSupensa()) {
+            reprovar();
+        }else if(valor > empresa.getLimite()) {
+            semLimiteDisponivel();            
+        }else if(valor > getValorMaximoSemAprovacaoGerente()) {
+            aguardarAprovacao();
+        } else {
+            liberarEmprestimo();
+        }
+    }   
 
     public static enum SituacaoEmprestimo {
         AGUARDANDO_APROVACAO,
         LIBERADO,
         QUITADO,
         SEM_LIMITE_DISPONIVEL,
-        REPROVADO
+        REPROVADO,
+        PENDENTE
     }
 
     
