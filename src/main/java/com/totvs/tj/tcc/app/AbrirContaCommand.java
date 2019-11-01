@@ -1,6 +1,7 @@
 package com.totvs.tj.tcc.app;
 
-import com.totvs.tj.tcc.domain.conta.Empresa;
+import com.totvs.tj.tcc.domain.conta.EmpresaId;
+import com.totvs.tj.tcc.domain.conta.Responsavel;
 
 import lombok.Builder;
 import lombok.Data;
@@ -9,6 +10,11 @@ import lombok.Data;
 @Builder
 public class AbrirContaCommand {
 
-    private Empresa empresa;
+    private EmpresaId idEmpresa;
+    private Responsavel responsavel;
+    private String cnpj;
+    private int numeroDeFuncionario;
+    private double valorMercadoEmpresa;
     
+ 
 }

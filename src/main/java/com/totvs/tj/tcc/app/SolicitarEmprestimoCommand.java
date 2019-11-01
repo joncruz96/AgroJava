@@ -1,6 +1,8 @@
 package com.totvs.tj.tcc.app;
 
-import com.totvs.tj.tcc.domain.conta.Emprestimo;
+import com.totvs.tj.tcc.domain.conta.Empresa;
+import com.totvs.tj.tcc.domain.conta.Emprestimo.SituacaoEmprestimo;
+import com.totvs.tj.tcc.domain.conta.EmprestimoId;
 
 import lombok.Builder;
 import lombok.Data;
@@ -9,6 +11,9 @@ import lombok.Data;
 @Builder
 public class SolicitarEmprestimoCommand {
 
-    private Emprestimo emprestimo;
+    private Empresa empresa;
+    private EmprestimoId idEmprestimo;
+    private double valor;
+    private SituacaoEmprestimo situacao;
     
 }

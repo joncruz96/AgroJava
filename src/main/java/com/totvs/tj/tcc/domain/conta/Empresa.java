@@ -69,7 +69,7 @@ public class Empresa {
     }
 
 
-    static class Builder {
+    public static class Builder {
 
         private EmpresaId id;
 

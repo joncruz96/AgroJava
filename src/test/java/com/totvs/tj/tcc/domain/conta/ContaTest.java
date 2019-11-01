@@ -38,19 +38,16 @@ public class ContaTest {
                 .nome(nomeResponsavel)
             .build();
 
-        Empresa empresa = Empresa.builder()
-                .id(idEmpresa)
-                .responsavel(responsavel)
-                .cnpj(cnpjEmpresa)                
-                .numerosDeFuncionarios(numerosDeFuncionariosNormal)
-                .valorMercadoEmpresa(valorMercadoEmpresaNormal)
-            .buildAsNew();
-        
+
         EmpresaRepository repository        = new EmpresaRepositoryMock();
         EmpresaApplicationService service   = EmpresaApplicationService.builder()
                 .repository(repository).build();
         AbrirContaCommand cmd = AbrirContaCommand.builder()
-                .empresa(empresa)
+                .idEmpresa(idEmpresa)
+                .responsavel(responsavel)
+                .cnpj(cnpjEmpresa)
+                .numeroDeFuncionario(numerosDeFuncionariosNormal)
+                .valorMercadoEmpresa(valorMercadoEmpresaNormal)
                 .build();
         
         //WHEN
@@ -78,19 +75,15 @@ public class ContaTest {
                 .nome(nomeResponsavel)
             .build();
 
-        Empresa empresa = Empresa.builder()
-                .id(idEmpresa)
-                .responsavel(responsavel)
-                .cnpj(cnpjEmpresa)                
-                .numerosDeFuncionarios(numerosDeFuncionariosLimite)
-                .valorMercadoEmpresa(valorMercadoEmpresaLimite)
-            .buildAsNew();
-        
         EmpresaRepository repository        = new EmpresaRepositoryMock();
         EmpresaApplicationService service   = EmpresaApplicationService.builder()
                 .repository(repository).build();
         AbrirContaCommand cmd = AbrirContaCommand.builder()
-                .empresa(empresa)
+                .idEmpresa(idEmpresa)
+                .responsavel(responsavel)
+                .cnpj(cnpjEmpresa)
+                .numeroDeFuncionario(numerosDeFuncionariosLimite)
+                .valorMercadoEmpresa(numerosDeFuncionariosLimite)
                 .build();
         
         //WHEN

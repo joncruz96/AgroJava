@@ -19,7 +19,12 @@ public class EmprestimoApplicationService {
     }
     
     public EmprestimoId handle(SolicitarEmprestimoCommand cmd) {
-        Emprestimo emprestimo = cmd.getEmprestimo();
+        Emprestimo emprestimo = Emprestimo.builder()
+                .empresa(cmd.getEmpresa())
+                .id(cmd.getIdEmprestimo())
+                 .valor(cmd.getValor())
+                 .situacao(cmd.getSituacao())
+                 .build();
        
         emprestimo.solicitarLiberacaoEmprestimo();                    
         

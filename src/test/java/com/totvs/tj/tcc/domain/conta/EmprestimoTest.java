@@ -51,18 +51,14 @@ public class EmprestimoTest {
     public void aoSolicitarEmprestimo() throws Exception{
         
         //GIVEN
-        Emprestimo emprestimo = Emprestimo.builder()
-                .empresa(empresa)
-                .id(idEmprestimo)
-                 .valor(valorEmprestimo)
-                 .situacao(SituacaoEmprestimo.PENDENTE)
-                 .build();
-
         EmprestimoRepository repository        = new EmprestimoRepositoryMock();
         EmprestimoApplicationService service   = EmprestimoApplicationService.builder()
                 .repository(repository).build();
         SolicitarEmprestimoCommand cmd = SolicitarEmprestimoCommand.builder()
-                .emprestimo(emprestimo)
+                .empresa(empresa)
+                .idEmprestimo(idEmprestimo)
+                .valor(valorEmprestimo)
+                .situacao(SituacaoEmprestimo.PENDENTE)
                 .build();
         
         //WHEN

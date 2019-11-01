@@ -20,7 +20,14 @@ public class EmpresaApplicationService {
     
     public EmpresaId handle(AbrirContaCommand cmd) {
         
-        Empresa empresa = cmd.getEmpresa();
+        Empresa empresa = Empresa.builder()
+                .id(cmd.getIdEmpresa())
+                .responsavel(cmd.getResponsavel())
+                .cnpj(cmd.getCnpj())                
+                .numerosDeFuncionarios(cmd.getNumeroDeFuncionario())
+                .valorMercadoEmpresa(cmd.getValorMercadoEmpresa())
+            .buildAsNew();
+        
         
         repository.save(empresa);
         
