@@ -26,7 +26,7 @@ public class EmprestimoApplicationService {
                  .situacao(cmd.getSituacao())
                  .build();
        
-        emprestimo.solicitarLiberacaoEmprestimo();                    
+        //emprestimo.solicitarLiberacaoEmprestimo();                     
         
         repository.save(emprestimo);
         

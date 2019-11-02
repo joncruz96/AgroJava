@@ -28,11 +28,11 @@ public class Empresa {
     private int numerosDeFuncionarios;
 
     private Situacao situacao;
-    
+
     private double limiteEmergencial;
-    
+
     private final double maximoLimite = 15000;
-    
+
     private Empresa(Builder builder) {
         this.id = builder.id;
         this.responsavel = Objects.requireNonNull(builder.responsavel);
@@ -42,49 +42,45 @@ public class Empresa {
         this.numerosDeFuncionarios = builder.numerosDeFuncionarios;
         this.situacao = builder.situacao;
     }
-    
+
     public static Builder builder() {
         return new Builder();
     }
-    
+
     public double getContaLimite() {
         return this.conta.getLimite();
     }
-   
-    
+
     public boolean isSupensa() {
         if (this.situacao.equals(Situacao.SUSPENSO))
             return true;
-        
+
         return false;
+    }
+
+    public void suspender() {
+        situacao = Situacao.SUSPENSO;
     }
     
     public void adicionarLimiteEmergencial(double valorEmergencial) {
         this.conta.adicionarLimiteEmergencial(valorEmergencial);
     }
-    
+
     public double getLimite() {
         return this.conta.getLimite() + this.conta.getLimiteEmergencial();
     }
-    
+
     public double getLimiteEmergencial() {
         return this.conta.getLimiteEmergencial();
     }
-    
+
     public double getContaSaldo() {
         return this.conta.getSaldoAlocado();
     }
-    
+
     public double getSaldoAlocado() {
         return this.getContaSaldo();
     }
-    
-    
-    
-
-    
-   
-
 
     public static class Builder {
 
@@ -93,7 +89,7 @@ public class Empresa {
         private Responsavel responsavel;
 
         private double valorMercadoEmpresa;
-              
+
         private String cnpj;
 
         private Conta conta;
@@ -101,9 +97,8 @@ public class Empresa {
         private int numerosDeFuncionarios;
 
         private Situacao situacao;
-        
+
         private final double maximoLimite = 15000;
-        
 
         public Builder id(EmpresaId id) {
             this.id = id;
@@ -154,18 +149,12 @@ public class Empresa {
 
             return this.numerosDeFuncionarios * this.valorMercadoEmpresa;
         }
-        
-        
+
     }
-    
-    
-
-
 
     static enum Situacao {
         ABERTO,
         SUSPENSO;
     }
-   
 
 }
