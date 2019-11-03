@@ -80,8 +80,11 @@ public class EmprestimoTest {
         // THEN
         Emprestimo emprestimoSaved = repository.getOne(emprestimoId);
         
+        emprestimoSaved.reprovar(emprestimoSaved);
+        
         assertNotNull(empresa);
         assertEquals(SituacaoEmprestimo.REPROVADO, emprestimoSaved.getSituacao());
+        
     }
 
     @Test
@@ -106,7 +109,9 @@ public class EmprestimoTest {
 
         // THEN
         Emprestimo emprestimoSaved = repository.getOne(emprestimoId);
-
+        
+        emprestimoSaved.semLimiteDisponivel(emprestimoSaved);
+        
         assertNotNull(empresa);
         assertEquals(SituacaoEmprestimo.SEM_LIMITE_DISPONIVEL, emprestimoSaved.getSituacao());
     }
@@ -134,6 +139,8 @@ public class EmprestimoTest {
         // THEN
         Emprestimo emprestimoSaved = repository.getOne(emprestimoId);
 
+        emprestimoSaved.aguardarAprovacao(emprestimoSaved);
+        
         assertNotNull(empresa);
         assertEquals(SituacaoEmprestimo.AGUARDANDO_APROVACAO, emprestimoSaved.getSituacao());
     }
@@ -160,7 +167,9 @@ public class EmprestimoTest {
 
         // THEN
         Emprestimo emprestimoSaved = repository.getOne(emprestimoId);
-
+        
+        emprestimoSaved.liberarEmprestimo(emprestimoSaved);
+        
         assertNotNull(empresa);
         assertEquals(SituacaoEmprestimo.LIBERADO, emprestimoSaved.getSituacao());
     }   

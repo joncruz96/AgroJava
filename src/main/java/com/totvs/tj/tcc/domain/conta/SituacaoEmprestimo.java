@@ -5,12 +5,12 @@ public enum SituacaoEmprestimo {
     PENDENTE {
         @Override
         public SituacaoEmprestimo nextState(Emprestimo emprestimo) {
-            
-            if( emprestimo.getValor() > emprestimo.getEmpresa().getValorMercadoEmpresa())
-                return AGUARDANDO_APROVACAO;
-            
+           
             if( emprestimo.getValor() > emprestimo.getEmpresa().getLimite())
                 return SEM_LIMITE_DISPONIVEL;
+            
+            if( emprestimo.getValor() > emprestimo.getValorMaximoSemAprovacaoGerente())
+                return AGUARDANDO_APROVACAO;
             
             if( emprestimo.getEmpresa().isSupensa())
                 return REPROVADO;

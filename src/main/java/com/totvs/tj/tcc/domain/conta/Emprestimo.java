@@ -19,45 +19,27 @@ public class Emprestimo {
     private double valor;
     private final double porcentagemAprovacaoGerente = 25;
 
-    public void reprovar() {
-        this.situacao = SituacaoEmprestimo.REPROVADO;
+    public Emprestimo() {
+        situacao = SituacaoEmprestimo.PENDENTE;
     }
 
-    public void semLimiteDisponivel() {
-        this.situacao = SituacaoEmprestimo.SEM_LIMITE_DISPONIVEL;
+    public void reprovar(Emprestimo emprestimo) {
+        this.situacao = situacao.nextState(emprestimo);
     }
 
-    public void aguardarAprovacao() {
-        this.situacao = SituacaoEmprestimo.AGUARDANDO_APROVACAO;
+    public void semLimiteDisponivel(Emprestimo emprestimo) {
+        this.situacao = situacao.nextState(emprestimo);
     }
 
-    public void liberarEmprestimo() {
-        this.situacao = SituacaoEmprestimo.LIBERADO;
+    public void aguardarAprovacao(Emprestimo emprestimo) {
+        this.situacao = situacao.nextState(emprestimo);
+    }
+
+    public void liberarEmprestimo(Emprestimo emprestimo) {
+        this.situacao = situacao.nextState(emprestimo);
     }
 
     public double getValorMaximoSemAprovacaoGerente() {
         return empresa.getLimite() * (porcentagemAprovacaoGerente / 100);
     }
-
-    //    public void solicitarLiberacaoEmprestimo() {
-    //        if(empresa.isSupensa()) {
-    //            reprovar();
-    //        }else if(valor > empresa.getLimite()) {
-    //            semLimiteDisponivel();            
-    //        }else if(valor > getValorMaximoSemAprovacaoGerente()) {
-    //            aguardarAprovacao();
-    //        } else {
-    //            liberarEmprestimo();
-    //        }
-    //    }   
-    //
-    //    public static enum SituacaoEmprestimo {
-    //        AGUARDANDO_APROVACAO,
-    //        LIBERADO,
-    //        QUITADO,
-    //        SEM_LIMITE_DISPONIVEL,
-    //        REPROVADO,
-    //        PENDENTE
-    //    }
-
 }

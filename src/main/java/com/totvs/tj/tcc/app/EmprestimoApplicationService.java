@@ -24,9 +24,7 @@ public class EmprestimoApplicationService {
                 .id(cmd.getIdEmprestimo())
                  .valor(cmd.getValor())
                  .situacao(cmd.getSituacao())
-                 .build();
-       
-        //emprestimo.solicitarLiberacaoEmprestimo();                     
+                 .build();             
         
         repository.save(emprestimo);
         
