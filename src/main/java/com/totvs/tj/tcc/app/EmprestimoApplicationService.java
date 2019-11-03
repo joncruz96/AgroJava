@@ -32,15 +32,15 @@ public class EmprestimoApplicationService {
         
         return emprestimo.getId();
     }
-   /*
-    public void handle(SuspenderContaCommand cmd) {
+   
+    public EmprestimoId handle(QuitarEmprestimoCommand cmd) {
+        Emprestimo emprestimo = cmd.getEmprestimo();
+       
+        emprestimo.quitarEmprestimo();                    
         
-        Conta conta = repository.getOne(cmd.getConta());
+        repository.save(emprestimo);
         
-        conta.suspender();
-        
-        repository.save(conta);
+        return emprestimo.getId();
     }
-    */
   
 }

@@ -1,5 +1,6 @@
 package com.totvs.tj.tcc.domain.conta;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.LinkedHashMap;
@@ -9,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.totvs.tj.tcc.app.EmprestimoApplicationService;
+import com.totvs.tj.tcc.app.QuitarEmprestimoCommand;
 import com.totvs.tj.tcc.app.SolicitarEmprestimoCommand;
 import com.totvs.tj.tcc.domain.conta.Emprestimo.SituacaoEmprestimo;
 
@@ -67,7 +69,41 @@ public class EmprestimoTest {
         // THEN
         Emprestimo emprestimoSaved = repository.getOne(emprestimoId);
         
-        assertNotNull(empresa);
+        assertNotNull(emprestimoSaved);
+        assertEquals(empresa.getSaldoAlocado(), valorEmprestimo, 2);
+        assertEquals(emprestimoSaved.getSituacao(), SituacaoEmprestimo.LIBERADO);
+    }
+    
+    @Test
+    public void aoQuitarEmprestimo() throws Exception{
+        
+        //GIVEN
+        Emprestimo emprestimo = Emprestimo.builder()
+                .empresa(empresa)
+                .id(idEmprestimo)
+                 .valor(valorEmprestimo)
+                 .situacao(SituacaoEmprestimo.LIBERADO)
+                 .build();
+        
+        emprestimo.liberarEmprestimo();
+        
+        EmprestimoRepository repository        = new EmprestimoRepositoryMock();
+        EmprestimoApplicationService service   = EmprestimoApplicationService.builder()
+                .repository(repository).build();
+        QuitarEmprestimoCommand cmd = QuitarEmprestimoCommand.builder()
+                .emprestimo(emprestimo)
+                .valor(valorEmprestimo)
+                .build();
+        
+        //WHEN
+        EmprestimoId emprestimoId = service.handle(cmd);
+        
+        // THEN
+        Emprestimo emprestimoSaved = repository.getOne(emprestimoId);
+        
+        assertNotNull(emprestimoSaved);
+        assertEquals(empresa.getSaldoAlocado(), 0, 2);
+        assertEquals(emprestimoSaved.getSituacao(), SituacaoEmprestimo.QUITADO);
     }
     
     static class EmprestimoRepositoryMock implements EmprestimoRepository {

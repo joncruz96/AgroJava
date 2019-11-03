@@ -42,16 +42,5 @@ public class EmpresaApplicationService {
         
         repository.update(empresa);                
     }
-        
-   /*
-    public void handle(SuspenderEmpresaCommand cmd) {
-        
-        Conta conta = repository.getOne(cmd.getConta());
-        
-        conta.suspender();
-        
-        repository.save(conta);
-    }
-    */
-  
+          
 }

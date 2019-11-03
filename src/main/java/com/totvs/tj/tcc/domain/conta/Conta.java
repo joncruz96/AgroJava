@@ -42,6 +42,18 @@ public class Conta {
         return this.getLimite() * (porcentagemLimiteEmergencial / 100);
     }
 
+    public void alocarSaldo(double valor) {
+        this.saldoAlocado += valor;         
+    }
+    
+    public void desalocarSaldo(double valor) {
+        this.saldoAlocado -= valor;         
+    }
+    
+    public double getLimiteAtual() {
+        return (this.limite + this.limiteEmergencial) - this.saldoAlocado;
+    }
+
 }
 
 

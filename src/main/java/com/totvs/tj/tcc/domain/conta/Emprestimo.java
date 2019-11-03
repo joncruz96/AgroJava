@@ -34,16 +34,22 @@ public class Emprestimo {
     
     public void liberarEmprestimo() {
         this.situacao = SituacaoEmprestimo.LIBERADO;
+        this.empresa.alocarSaldoConta(this.valor);
+    }
+    
+    public void quitarEmprestimo() {
+        this.situacao = SituacaoEmprestimo.QUITADO;
+        this.empresa.desalocarSaldoConta(this.valor);
     }
     
     public double getValorMaximoSemAprovacaoGerente() {
-        return empresa.getLimite() * (porcentagemAprovacaoGerente/100);
+        return empresa.getContaLimite() * (porcentagemAprovacaoGerente/100);
     }
     
     public void solicitarLiberacaoEmprestimo() {
         if(empresa.isSupensa()) {
             reprovar();
-        }else if(valor > empresa.getLimite()) {
+        }else if(valor > empresa.getContaLimiteAtual()) {
             semLimiteDisponivel();            
         }else if(valor > getValorMaximoSemAprovacaoGerente()) {
             aguardarAprovacao();

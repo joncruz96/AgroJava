@@ -49,8 +49,7 @@ public class Empresa {
     
     public double getContaLimite() {
         return this.conta.getLimite();
-    }
-   
+    }   
     
     public boolean isSupensa() {
         if (this.situacao.equals(Situacao.SUSPENSO))
@@ -63,12 +62,16 @@ public class Empresa {
         this.conta.adicionarLimiteEmergencial(valorEmergencial);
     }
     
-    public double getLimite() {
+    public double getContaLimiteTotal() {
         return this.conta.getLimite() + this.conta.getLimiteEmergencial();
     }
     
-    public double getLimiteEmergencial() {
+    public double getContaLimiteEmergencial() {
         return this.conta.getLimiteEmergencial();
+    }
+    
+    public double getContaLimiteAtual() {
+        return this.conta.getLimiteAtual();
     }
     
     public double getContaSaldo() {
@@ -77,13 +80,15 @@ public class Empresa {
     
     public double getSaldoAlocado() {
         return this.getContaSaldo();
+    }        
+
+    public void alocarSaldoConta(double valor) {
+        this.conta.alocarSaldo(valor);        
     }
     
-    
-    
-
-    
-   
+    public void desalocarSaldoConta(double valor) {
+        this.conta.desalocarSaldo(valor);        
+    }   
 
 
     public static class Builder {
@@ -166,6 +171,5 @@ public class Empresa {
         ABERTO,
         SUSPENSO;
     }
-   
 
 }
