@@ -57,7 +57,11 @@ public class Empresa {
         
         return false;
     }
-    
+
+    public void suspender() {
+        situacao = Situacao.SUSPENSO;
+    }
+     
     public void adicionarLimiteEmergencial(double valorEmergencial) {
         this.conta.adicionarLimiteEmergencial(valorEmergencial);
     }

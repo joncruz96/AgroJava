@@ -18,27 +18,30 @@ public class Emprestimo {
     private SituacaoEmprestimo situacao;
     private double valor;
     private final double porcentagemAprovacaoGerente = 25;
+
+    public Emprestimo() {
+        situacao = SituacaoEmprestimo.PENDENTE;
+    }    
     
-    
-    public void reprovar() {
-        this.situacao = SituacaoEmprestimo.REPROVADO;
+    public void reprovar(Emprestimo emprestimo) {
+        this.situacao = situacao.nextState(emprestimo);
     }
     
-    public void semLimiteDisponivel() {
-        this.situacao = SituacaoEmprestimo.SEM_LIMITE_DISPONIVEL;
+    public void semLimiteDisponivel(Emprestimo emprestimo) {
+        this.situacao = situacao.nextState(emprestimo);
     }
+
+    public void aguardarAprovacao(Emprestimo emprestimo) {
+        this.situacao = situacao.nextState(emprestimo);
+    } 
     
-    public void aguardarAprovacao() {
-        this.situacao = SituacaoEmprestimo.AGUARDANDO_APROVACAO;
-    }  
-    
-    public void liberarEmprestimo() {
-        this.situacao = SituacaoEmprestimo.LIBERADO;
+    public void liberarEmprestimo(Emprestimo emprestimo) {
+        this.situacao = situacao.nextState(emprestimo);
         this.empresa.alocarSaldoConta(this.valor);
     }
     
-    public void quitarEmprestimo() {
-        this.situacao = SituacaoEmprestimo.QUITADO;
+    public void quitarEmprestimo(Emprestimo emprestimo) {
+        this.situacao = situacao.nextState(emprestimo);
         this.empresa.desalocarSaldoConta(this.valor);
     }
     
@@ -46,27 +49,4 @@ public class Emprestimo {
         return empresa.getContaLimite() * (porcentagemAprovacaoGerente/100);
     }
     
-    public void solicitarLiberacaoEmprestimo() {
-        if(empresa.isSupensa()) {
-            reprovar();
-        }else if(valor > empresa.getContaLimiteAtual()) {
-            semLimiteDisponivel();            
-        }else if(valor > getValorMaximoSemAprovacaoGerente()) {
-            aguardarAprovacao();
-        } else {
-            liberarEmprestimo();
-        }
-    }   
-
-    public static enum SituacaoEmprestimo {
-        AGUARDANDO_APROVACAO,
-        LIBERADO,
-        QUITADO,
-        SEM_LIMITE_DISPONIVEL,
-        REPROVADO,
-        PENDENTE
-    }
-
-    
-
 }
