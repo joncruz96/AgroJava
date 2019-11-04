@@ -33,7 +33,7 @@ public class EmprestimoTest {
     private Empresa empresa;
 
     private double valorEmprestimoQuitado = 1000;
-    
+
     private double valorEmprestimoLiberado = 1000;
 
     private double valorEmprestimoSemLimite = 20000;
@@ -82,7 +82,7 @@ public class EmprestimoTest {
         // THEN
         Emprestimo emprestimoSaved = repository.getOne(emprestimoId);
 
-        emprestimoSaved.reprovar(emprestimoSaved);
+        emprestimoSaved.reprovar();
 
         assertNotNull(emprestimoSaved);
         assertEquals(SituacaoEmprestimo.REPROVADO, emprestimoSaved.getSituacao());
@@ -112,7 +112,7 @@ public class EmprestimoTest {
         // THEN
         Emprestimo emprestimoSaved = repository.getOne(emprestimoId);
 
-        emprestimoSaved.semLimiteDisponivel(emprestimoSaved);
+        emprestimoSaved.semLimiteDisponivel();
 
         assertNotNull(emprestimoSaved);
         assertEquals(SituacaoEmprestimo.SEM_LIMITE_DISPONIVEL, emprestimoSaved.getSituacao());
@@ -141,7 +141,7 @@ public class EmprestimoTest {
         // THEN
         Emprestimo emprestimoSaved = repository.getOne(emprestimoId);
 
-        emprestimoSaved.aguardarAprovacao(emprestimoSaved);
+        emprestimoSaved.aguardarAprovacao();
 
         assertNotNull(emprestimoSaved);
         assertEquals(SituacaoEmprestimo.AGUARDANDO_APROVACAO, emprestimoSaved.getSituacao());
@@ -170,7 +170,7 @@ public class EmprestimoTest {
         // THEN
         Emprestimo emprestimoSaved = repository.getOne(emprestimoId);
 
-        emprestimoSaved.liberarEmprestimo(emprestimoSaved);
+        emprestimoSaved.liberarEmprestimo();
 
         assertNotNull(emprestimoSaved);
         assertEquals(empresa.getSaldoAlocado(), valorEmprestimoLiberado, 2);
@@ -178,6 +178,7 @@ public class EmprestimoTest {
     }
 
     @Test
+    @Description("Ao quitar emprestimo.")
     public void aoQuitarEmprestimo() throws Exception {
 
         //GIVEN
@@ -188,11 +189,13 @@ public class EmprestimoTest {
                 .situacao(SituacaoEmprestimo.LIBERADO)
                 .build();
 
-        emprestimo.liberarEmprestimo(emprestimo);
+        emprestimo.liberarEmprestimo();
 
         EmprestimoRepository repository = new EmprestimoRepositoryMock();
+
         EmprestimoApplicationService service = EmprestimoApplicationService.builder()
                 .repository(repository).build();
+
         QuitarEmprestimoCommand cmd = QuitarEmprestimoCommand.builder()
                 .emprestimo(emprestimo)
                 .valor(valorEmprestimoQuitado)
@@ -204,9 +207,11 @@ public class EmprestimoTest {
         // THEN
         Emprestimo emprestimoSaved = repository.getOne(emprestimoId);
 
+        System.out.println(empresa.getSaldoAlocado());
+
         assertNotNull(emprestimoSaved);
-        assertEquals(empresa.getSaldoAlocado(), 0, 2);
-        assertEquals(SituacaoEmprestimo.QUITADO,emprestimoSaved.getSituacao());
+        assertEquals(0, empresa.getSaldoAlocado(), 2);
+        assertEquals(SituacaoEmprestimo.QUITADO, emprestimoSaved.getSituacao());
     }
 
     static class EmprestimoRepositoryMock implements EmprestimoRepository {

@@ -34,7 +34,7 @@ public class EmprestimoApplicationService {
     public EmprestimoId handle(QuitarEmprestimoCommand cmd) {
         Emprestimo emprestimo = cmd.getEmprestimo();
        
-        emprestimo.quitarEmprestimo(emprestimo);                    
+        emprestimo.quitarEmprestimo();                    
         
         repository.save(emprestimo);
         

@@ -20,33 +20,45 @@ public class Emprestimo {
     private final double porcentagemAprovacaoGerente = 25;
 
     public Emprestimo() {
-        situacao = SituacaoEmprestimo.PENDENTE;
-    }    
-    
-    public void reprovar(Emprestimo emprestimo) {
-        this.situacao = situacao.nextState(emprestimo);
-    }
-    
-    public void semLimiteDisponivel(Emprestimo emprestimo) {
-        this.situacao = situacao.nextState(emprestimo);
+        this.situacao = SituacaoEmprestimo.PENDENTE;
     }
 
-    public void aguardarAprovacao(Emprestimo emprestimo) {
-        this.situacao = situacao.nextState(emprestimo);
-    } 
-    
-    public void liberarEmprestimo(Emprestimo emprestimo) {
-        this.situacao = situacao.nextState(emprestimo);
+    public void reprovar() {
+        this.situacao = situacao.nextState(this);
+    }
+
+    public void semLimiteDisponivel() {
+        this.situacao = situacao.nextState(this);
+    }
+
+    public void aguardarAprovacao() {
+        this.situacao = situacao.nextState(this);
+    }
+
+    public void liberarEmprestimo() {
+        this.situacao = situacao.nextState(this);
         this.empresa.alocarSaldoConta(this.valor);
     }
-    
-    public void quitarEmprestimo(Emprestimo emprestimo) {
-        this.situacao = situacao.nextState(emprestimo);
+
+    public void quitarEmprestimo() {
+        this.situacao = situacao.nextState(this);
         this.empresa.desalocarSaldoConta(this.valor);
     }
-    
+
     public double getValorMaximoSemAprovacaoGerente() {
-        return empresa.getContaLimite() * (porcentagemAprovacaoGerente/100);
+        return empresa.getContaLimite() * (porcentagemAprovacaoGerente / 100);
     }
-    
+
+    public boolean getIsSemLimiteDisponivel() {
+        return this.valor > empresa.getContaLimite();
+    }
+
+    public boolean getIsSupensa() {
+        return empresa.isSupensa();
+    }
+
+    public boolean getIsAguardandoAprovacao() {
+        return this.valor > getValorMaximoSemAprovacaoGerente();
+    }
+
 }
