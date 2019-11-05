@@ -9,7 +9,7 @@ import lombok.Data;
 @Builder
 public class QuitarEmprestimoCommand {
 
-    private Emprestimo emprestimo;    
-    private double valor;    
-    
+    private Emprestimo emprestimo;
+    private double valor;
+
 }

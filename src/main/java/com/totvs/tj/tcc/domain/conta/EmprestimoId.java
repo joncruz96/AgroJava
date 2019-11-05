@@ -22,5 +22,5 @@ public class EmprestimoId {
     public static EmprestimoId generate() {
         return EmprestimoId.from(UUID.randomUUID().toString());
     }
-    
+
 }

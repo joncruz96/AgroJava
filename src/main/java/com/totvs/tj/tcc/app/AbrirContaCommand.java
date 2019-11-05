@@ -15,6 +15,5 @@ public class AbrirContaCommand {
     private String cnpj;
     private int numeroDeFuncionario;
     private double valorMercadoEmpresa;
-    
- 
+
 }

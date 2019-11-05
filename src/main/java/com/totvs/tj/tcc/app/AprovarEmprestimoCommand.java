@@ -9,6 +9,6 @@ import lombok.Data;
 @Builder
 public class AprovarEmprestimoCommand {
 
-    private Emprestimo emprestimo;     
-    
+    private Emprestimo emprestimo;
+
 }

@@ -15,5 +15,5 @@ public class SolicitarEmprestimoCommand {
     private EmprestimoId idEmprestimo;
     private double valor;
     private SituacaoEmprestimo situacao;
-    
+
 }

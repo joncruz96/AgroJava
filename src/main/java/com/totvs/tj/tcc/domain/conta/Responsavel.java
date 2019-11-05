@@ -12,8 +12,8 @@ import lombok.ToString;
 @Builder
 @AllArgsConstructor(access = PRIVATE)
 public class Responsavel {
-    
+
     private String cpf;
     private String nome;
-      
+
 }

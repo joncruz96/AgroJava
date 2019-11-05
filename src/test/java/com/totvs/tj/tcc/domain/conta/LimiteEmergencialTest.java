@@ -26,7 +26,6 @@ public class LimiteEmergencialTest {
     private final String nomeResponsavel = "Nome do Responsável";
     private double limiteEmpresa;
     private Empresa empresa;
-    
 
     @Before
     public void setup() {
@@ -43,82 +42,78 @@ public class LimiteEmergencialTest {
                 .numerosDeFuncionarios(numerosDeFuncionarios)
                 .valorMercadoEmpresa(valorMercadoEmpresa)
                 .buildAsNew();
-        this.limiteEmpresa =  this.empresa.getContaLimite();
+        this.limiteEmpresa = this.empresa.getContaLimite();
 
     }
 
     @Test
-    public void aoSolicitarLimiteEmergencial() throws Exception{
-        
-        
+    public void aoSolicitarLimiteEmergencial() throws Exception {
+
         // GIVEN
         LimiteEmergencialCommand cmd = LimiteEmergencialCommand.builder()
-                                       .empresaId(idEmpresa)
-                                       .valorEmergencial(limiteEmergencial)
-                                       .build();
-        
+                .empresaId(idEmpresa)
+                .valorEmergencial(limiteEmergencial)
+                .build();
+
         EmpresaRepository repository = new EmpresaRepositoryMock();
         EmpresaApplicationService service = new EmpresaApplicationService(repository);
 
         repository.save(this.empresa);
-        
+
         // WHEN
         service.handle(cmd);
 
         // THEN
-        assertEquals(limiteEmergencial, repository.getOne(idEmpresa).getContaLimiteEmergencial(),  0 );
-        assertEquals(limiteEmergencial + this.limiteEmpresa, repository.getOne(idEmpresa).getContaLimiteTotal(), 0 );      
-        assertEquals(this.limiteEmpresa, repository.getOne(idEmpresa).getContaLimite(), 0 );      
+        assertEquals(limiteEmergencial, repository.getOne(idEmpresa).getContaLimiteEmergencial(), 0);
+        assertEquals(limiteEmergencial + this.limiteEmpresa, repository.getOne(idEmpresa).getContaLimiteTotal(), 0);
+        assertEquals(this.limiteEmpresa, repository.getOne(idEmpresa).getContaLimite(), 0);
     }
-    
+
     @Test(expected = IllegalArgumentException.class)
-    public void aoSolicitarLimiteEmergencialPelaSegundaVez() throws Exception{
-        
-        
+    public void aoSolicitarLimiteEmergencialPelaSegundaVez() throws Exception {
+
         // GIVEN
         LimiteEmergencialCommand cmd = LimiteEmergencialCommand.builder()
-                                       .empresaId(idEmpresa)
-                                       .valorEmergencial(limiteEmergencial)
-                                       .build();
-        
+                .empresaId(idEmpresa)
+                .valorEmergencial(limiteEmergencial)
+                .build();
+
         EmpresaRepository repository = new EmpresaRepositoryMock();
         EmpresaApplicationService service = new EmpresaApplicationService(repository);
 
         repository.save(this.empresa);
-        
-        // WHEN
-        service.handle(cmd);
-        service.handle(cmd);
-        
-        // THEN
-        //error.
-      
-    }
-    
-    @Test(expected = IllegalArgumentException.class)
-    public void aoSolicitarLimiteEmergencialAcimaDoPermitido() throws Exception{
-        
-        
-        // GIVEN
-        LimiteEmergencialCommand cmd = LimiteEmergencialCommand.builder()
-                                       .empresaId(idEmpresa)
-                                       .valorEmergencial(limiteEmergencialAcimaPermitido)
-                                       .build();
-        
-        EmpresaRepository repository = new EmpresaRepositoryMock();
-        EmpresaApplicationService service = new EmpresaApplicationService(repository);
 
-        repository.save(this.empresa);
-        
         // WHEN
-        service.handle(cmd);    
+        service.handle(cmd);
+        service.handle(cmd);
 
         // THEN
         //error.
-      
+
     }
-    
-    
+
+    @Test(expected = IllegalArgumentException.class)
+    public void aoSolicitarLimiteEmergencialAcimaDoPermitido() throws Exception {
+
+        // GIVEN
+        LimiteEmergencialCommand cmd = LimiteEmergencialCommand.builder()
+                .empresaId(idEmpresa)
+                .valorEmergencial(limiteEmergencialAcimaPermitido)
+                .build();
+
+        EmpresaRepository repository = new EmpresaRepositoryMock();
+        EmpresaApplicationService service = new EmpresaApplicationService(repository);
+
+        repository.save(this.empresa);
+
+        // WHEN
+        service.handle(cmd);
+
+        // THEN
+        //error.
+
+    }
+
     static class EmpresaRepositoryMock implements EmpresaRepository {
 
         private final Map<EmpresaId, Empresa> empresas = new LinkedHashMap<>();
@@ -127,7 +122,7 @@ public class LimiteEmergencialTest {
         public void save(Empresa empresa) {
             empresas.put(empresa.getId(), empresa);
         }
-        
+
         @Override
         public void update(Empresa empresa) {
             empresas.replace(empresa.getId(), empresa);

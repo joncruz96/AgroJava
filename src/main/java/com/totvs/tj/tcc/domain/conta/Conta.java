@@ -12,48 +12,46 @@ import lombok.ToString;
 @Builder()
 @AllArgsConstructor(access = PRIVATE)
 public class Conta {
-    
+
     private final double limite;
-    
+
     private double limiteEmergencial;
-    
-    private double saldoAlocado;    
-    
+
+    private double saldoAlocado;
+
     private final double porcentagemLimiteEmergencial = 50;
-    
+
     public void validarSolicitacaoLimiteEmergencial(double valorEmergencial) {
         if (isLimiteJaSolicitado()) {
             throw new IllegalArgumentException("Já foi solicitado um limite");
-        }else if(valorEmergencial > getMaximoLimiteEmergencial()) {
+        } else if (valorEmergencial > getMaximoLimiteEmergencial()) {
             throw new IllegalArgumentException("Valor do Limite Emergencial acima do permitido.");
-        }    
+        }
     }
-    
+
     public void adicionarLimiteEmergencial(double valorEmergencial) {
         this.validarSolicitacaoLimiteEmergencial(valorEmergencial);
-        this.limiteEmergencial = valorEmergencial;        
+        this.limiteEmergencial = valorEmergencial;
     }
-    
+
     public boolean isLimiteJaSolicitado() {
         return this.getLimiteEmergencial() > 0;
     }
-    
+
     public double getMaximoLimiteEmergencial() {
         return this.getLimite() * (porcentagemLimiteEmergencial / 100);
     }
 
     public void alocarSaldo(double valor) {
-        this.saldoAlocado += valor;         
+        this.saldoAlocado += valor;
     }
-    
+
     public void desalocarSaldo(double valor) {
-        this.saldoAlocado -= valor;         
+        this.saldoAlocado -= valor;
     }
-    
+
     public double getLimiteAtual() {
         return (this.limite + this.limiteEmergencial) - this.saldoAlocado;
     }
 
 }
-
-

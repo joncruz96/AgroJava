@@ -11,44 +11,44 @@ import lombok.Builder;
 @Service
 @Builder
 public class EmprestimoApplicationService {
-    
+
     private EmprestimoRepository repository;
-    
+
     public EmprestimoApplicationService(EmprestimoRepository repository) {
         this.repository = repository;
     }
-    
+
     public EmprestimoId handle(SolicitarEmprestimoCommand cmd) {
         Emprestimo emprestimo = Emprestimo.builder()
                 .empresa(cmd.getEmpresa())
                 .id(cmd.getIdEmprestimo())
-                 .valor(cmd.getValor())
-                 .situacao(cmd.getSituacao())
-                 .build();                   
-        
+                .valor(cmd.getValor())
+                .situacao(cmd.getSituacao())
+                .build();
+
         repository.save(emprestimo);
-        
+
         return emprestimo.getId();
     }
-   
+
     public EmprestimoId handle(QuitarEmprestimoCommand cmd) {
         Emprestimo emprestimo = cmd.getEmprestimo();
-       
-        emprestimo.quitarEmprestimo();                    
-        
+
+        emprestimo.quitarEmprestimo();
+
         repository.save(emprestimo);
-        
+
         return emprestimo.getId();
     }
-    
+
     public EmprestimoId handle(AprovarEmprestimoCommand cmd) {
         Emprestimo emprestimo = cmd.getEmprestimo();
-       
-        emprestimo.aprovarEmprestimo();                    
-        
+
+        emprestimo.aprovarEmprestimo();
+
         repository.save(emprestimo);
-        
+
         return emprestimo.getId();
     }
-  
+
 }

@@ -10,8 +10,6 @@ import lombok.Data;
 public class LimiteEmergencialCommand {
 
     private EmpresaId empresaId;
-    
     private double valorEmergencial;
-    
- 
+
 }
