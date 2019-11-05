@@ -24,7 +24,7 @@ public class LimiteEmergencialTest {
 
     private final String cpfResponsavel = "099.111.333-09";
     private final String nomeResponsavel = "Nome do Responsável";
-
+    private double limiteEmpresa;
     private Empresa empresa;
     
 
@@ -43,6 +43,7 @@ public class LimiteEmergencialTest {
                 .numerosDeFuncionarios(numerosDeFuncionarios)
                 .valorMercadoEmpresa(valorMercadoEmpresa)
                 .buildAsNew();
+        this.limiteEmpresa =  this.empresa.getContaLimite();
 
     }
 
@@ -65,9 +66,9 @@ public class LimiteEmergencialTest {
         service.handle(cmd);
 
         // THEN
-        assertEquals(repository.getOne(idEmpresa).getContaLimiteEmergencial(), limiteEmergencial, 0 );
-              
-       
+        assertEquals(limiteEmergencial, repository.getOne(idEmpresa).getContaLimiteEmergencial(),  0 );
+        assertEquals(limiteEmergencial + this.limiteEmpresa, repository.getOne(idEmpresa).getContaLimiteTotal(), 0 );      
+        assertEquals(this.limiteEmpresa, repository.getOne(idEmpresa).getContaLimite(), 0 );      
     }
     
     @Test(expected = IllegalArgumentException.class)

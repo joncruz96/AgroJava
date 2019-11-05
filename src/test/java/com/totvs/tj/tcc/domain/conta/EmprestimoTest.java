@@ -39,6 +39,8 @@ public class EmprestimoTest {
     private double valorEmprestimoSemLimite = 20000;
 
     private double valorEmprestimoAguardandoAprovacao = 3100;
+    
+    private double limiteEmpresa;
 
     @Before
     public void setup() {
@@ -55,6 +57,8 @@ public class EmprestimoTest {
                 .numerosDeFuncionarios(numerosDeFuncionarios)
                 .valorMercadoEmpresa(valorMercadoEmpresa)
                 .buildAsNew();
+        
+        this.limiteEmpresa =  this.empresa.getContaLimite();
     }
 
     @Test
@@ -176,6 +180,8 @@ public class EmprestimoTest {
         assertEquals(empresa.getSaldoAlocado(), valorEmprestimoLiberado, 2);
         assertEquals(emprestimoId.toString(), emprestimoSaved.getId().toString());
         assertEquals(SituacaoEmprestimo.LIBERADO, emprestimoSaved.getSituacao());
+        assertEquals( this.limiteEmpresa - valorEmprestimoLiberado, empresa.getContaLimiteAtual(), 2);
+        
     }
 
     @Test
