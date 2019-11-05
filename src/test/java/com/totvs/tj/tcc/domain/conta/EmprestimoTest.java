@@ -40,7 +40,7 @@ public class EmprestimoTest {
     private double valorEmprestimoSemLimite = 20000;
 
     private double valorEmprestimoAguardandoAprovacao = 3100;
-    
+
     private double limiteEmpresa;
 
     @Before
@@ -58,8 +58,8 @@ public class EmprestimoTest {
                 .numerosDeFuncionarios(numerosDeFuncionarios)
                 .valorMercadoEmpresa(valorMercadoEmpresa)
                 .buildAsNew();
-        
-        this.limiteEmpresa =  this.empresa.getContaLimite();
+
+        this.limiteEmpresa = this.empresa.getContaLimite();
     }
 
     @Test
@@ -91,8 +91,8 @@ public class EmprestimoTest {
 
         assertNotNull(emprestimoSaved);
         assertEquals(SituacaoEmprestimo.REPROVADO, emprestimoSaved.getSituacao());
-        assertEquals(SituacaoEmprestimo.REPROVADO, SituacaoEmprestimo.REPROVADO.nextState(emprestimoSaved));
-        
+        assertEquals(SituacaoEmprestimo.REPROVADO, SituacaoEmprestimo.REPROVADO.proximaSituacao(emprestimoSaved));
+
     }
 
     @Test
@@ -122,7 +122,8 @@ public class EmprestimoTest {
 
         assertNotNull(emprestimoSaved);
         assertEquals(SituacaoEmprestimo.SEM_LIMITE_DISPONIVEL, emprestimoSaved.getSituacao());
-        assertEquals(SituacaoEmprestimo.SEM_LIMITE_DISPONIVEL, SituacaoEmprestimo.SEM_LIMITE_DISPONIVEL.nextState(emprestimoSaved));
+        assertEquals(SituacaoEmprestimo.SEM_LIMITE_DISPONIVEL,
+                SituacaoEmprestimo.SEM_LIMITE_DISPONIVEL.proximaSituacao(emprestimoSaved));
     }
 
     @Test
@@ -183,10 +184,10 @@ public class EmprestimoTest {
         assertEquals(empresa.getSaldoAlocado(), valorEmprestimoLiberado, 2);
         assertEquals(emprestimoId.toString(), emprestimoSaved.getId().toString());
         assertEquals(SituacaoEmprestimo.LIBERADO, emprestimoSaved.getSituacao());
-        assertEquals( this.limiteEmpresa - valorEmprestimoLiberado, empresa.getContaLimiteAtual(), 2);
-        
+        assertEquals(this.limiteEmpresa - valorEmprestimoLiberado, empresa.getContaLimiteAtual(), 2);
+
     }
-    
+
     @Test
     @Description("Ao aprovar emprestimo.")
     public void aoAprovarEmprestimo() throws Exception {
@@ -199,14 +200,13 @@ public class EmprestimoTest {
                 .situacao(SituacaoEmprestimo.AGUARDANDO_APROVACAO)
                 .build();
 
-
         EmprestimoRepository repository = new EmprestimoRepositoryMock();
 
         EmprestimoApplicationService service = EmprestimoApplicationService.builder()
                 .repository(repository).build();
 
         AprovarEmprestimoCommand cmd = AprovarEmprestimoCommand.builder()
-                .emprestimo(emprestimo)             
+                .emprestimo(emprestimo)
                 .build();
 
         //WHEN
@@ -221,7 +221,7 @@ public class EmprestimoTest {
         assertEquals(empresa.getSaldoAlocado(), valorEmprestimoLiberado, 2);
         assertEquals(emprestimoId.toString(), emprestimoSaved.getId().toString());
         assertEquals(SituacaoEmprestimo.LIBERADO, emprestimoSaved.getSituacao());
-        assertEquals( this.limiteEmpresa - valorEmprestimoLiberado, empresa.getContaLimiteAtual(), 2);
+        assertEquals(this.limiteEmpresa - valorEmprestimoLiberado, empresa.getContaLimiteAtual(), 2);
     }
 
     @Test

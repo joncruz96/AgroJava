@@ -4,7 +4,7 @@ public enum SituacaoEmprestimo {
 
     PENDENTE {
         @Override
-        public SituacaoEmprestimo nextState(Emprestimo emprestimo) {
+        public SituacaoEmprestimo proximaSituacao(Emprestimo emprestimo) {
 
             if (emprestimo.getIsSemLimiteDisponivel())
                 return SEM_LIMITE_DISPONIVEL;
@@ -22,39 +22,39 @@ public enum SituacaoEmprestimo {
 
     AGUARDANDO_APROVACAO {
         @Override
-        public SituacaoEmprestimo nextState(Emprestimo emprestimo) {
+        public SituacaoEmprestimo proximaSituacao(Emprestimo emprestimo) {
             return LIBERADO;
         }
     },
 
     LIBERADO {
         @Override
-        public SituacaoEmprestimo nextState(Emprestimo emprestimo) {
+        public SituacaoEmprestimo proximaSituacao(Emprestimo emprestimo) {
             return QUITADO;
         }
     },
 
     SEM_LIMITE_DISPONIVEL {
         @Override
-        public SituacaoEmprestimo nextState(Emprestimo emprestimo) {
+        public SituacaoEmprestimo proximaSituacao(Emprestimo emprestimo) {
             return this;
         }
     },
 
     REPROVADO {
         @Override
-        public SituacaoEmprestimo nextState(Emprestimo emprestimo) {
+        public SituacaoEmprestimo proximaSituacao(Emprestimo emprestimo) {
             return this;
         }
     },
 
     QUITADO {
         @Override
-        public SituacaoEmprestimo nextState(Emprestimo emprestimo) {
+        public SituacaoEmprestimo proximaSituacao(Emprestimo emprestimo) {
             return this;
         }
     };
 
-    public abstract SituacaoEmprestimo nextState(Emprestimo emprestimo);
+    public abstract SituacaoEmprestimo proximaSituacao(Emprestimo emprestimo);
 
 }

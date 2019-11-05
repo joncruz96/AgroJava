@@ -18,32 +18,31 @@ public class Emprestimo {
     private SituacaoEmprestimo situacao;
     private double valor;
     private final double porcentagemAprovacaoGerente = 25;
-   
 
     public void reprovar() {
-        this.situacao = situacao.nextState(this);
+        this.situacao = situacao.proximaSituacao(this);
     }
 
     public void semLimiteDisponivel() {
-        this.situacao = situacao.nextState(this);
+        this.situacao = situacao.proximaSituacao(this);
     }
 
     public void aguardarAprovacao() {
-        this.situacao = situacao.nextState(this);
+        this.situacao = situacao.proximaSituacao(this);
     }
-    
+
     public void aprovarEmprestimo() {
-        this.situacao = situacao.nextState(this);    
+        this.situacao = situacao.proximaSituacao(this);
         this.empresa.alocarSaldoConta(this.valor);
     }
 
     public void liberarEmprestimo() {
-        this.situacao = situacao.nextState(this);
+        this.situacao = situacao.proximaSituacao(this);
         this.empresa.alocarSaldoConta(this.valor);
     }
 
     public void quitarEmprestimo() {
-        this.situacao = situacao.nextState(this);
+        this.situacao = situacao.proximaSituacao(this);
         this.empresa.desalocarSaldoConta(this.valor);
     }
 
@@ -62,7 +61,5 @@ public class Emprestimo {
     public boolean getIsAguardandoAprovacao() {
         return this.valor > getValorMaximoSemAprovacaoGerente();
     }
-
-    
 
 }
