@@ -40,5 +40,15 @@ public class EmprestimoApplicationService {
         
         return emprestimo.getId();
     }
+    
+    public EmprestimoId handle(AprovarEmprestimoCommand cmd) {
+        Emprestimo emprestimo = cmd.getEmprestimo();
+       
+        emprestimo.aprovarEmprestimo();                    
+        
+        repository.save(emprestimo);
+        
+        return emprestimo.getId();
+    }
   
 }

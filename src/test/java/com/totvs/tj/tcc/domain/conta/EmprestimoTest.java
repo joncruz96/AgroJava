@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.annotation.Description;
 
+import com.totvs.tj.tcc.app.AprovarEmprestimoCommand;
 import com.totvs.tj.tcc.app.EmprestimoApplicationService;
 import com.totvs.tj.tcc.app.QuitarEmprestimoCommand;
 import com.totvs.tj.tcc.app.SolicitarEmprestimoCommand;
@@ -90,7 +91,8 @@ public class EmprestimoTest {
 
         assertNotNull(emprestimoSaved);
         assertEquals(SituacaoEmprestimo.REPROVADO, emprestimoSaved.getSituacao());
-
+        assertEquals(SituacaoEmprestimo.REPROVADO, SituacaoEmprestimo.REPROVADO.nextState(emprestimoSaved));
+        
     }
 
     @Test
@@ -120,6 +122,7 @@ public class EmprestimoTest {
 
         assertNotNull(emprestimoSaved);
         assertEquals(SituacaoEmprestimo.SEM_LIMITE_DISPONIVEL, emprestimoSaved.getSituacao());
+        assertEquals(SituacaoEmprestimo.SEM_LIMITE_DISPONIVEL, SituacaoEmprestimo.SEM_LIMITE_DISPONIVEL.nextState(emprestimoSaved));
     }
 
     @Test
@@ -182,6 +185,43 @@ public class EmprestimoTest {
         assertEquals(SituacaoEmprestimo.LIBERADO, emprestimoSaved.getSituacao());
         assertEquals( this.limiteEmpresa - valorEmprestimoLiberado, empresa.getContaLimiteAtual(), 2);
         
+    }
+    
+    @Test
+    @Description("Ao aprovar emprestimo.")
+    public void aoAprovarEmprestimo() throws Exception {
+
+        //GIVEN
+        Emprestimo emprestimo = Emprestimo.builder()
+                .empresa(empresa)
+                .id(idEmprestimo)
+                .valor(valorEmprestimoLiberado)
+                .situacao(SituacaoEmprestimo.AGUARDANDO_APROVACAO)
+                .build();
+
+
+        EmprestimoRepository repository = new EmprestimoRepositoryMock();
+
+        EmprestimoApplicationService service = EmprestimoApplicationService.builder()
+                .repository(repository).build();
+
+        AprovarEmprestimoCommand cmd = AprovarEmprestimoCommand.builder()
+                .emprestimo(emprestimo)             
+                .build();
+
+        //WHEN
+        EmprestimoId emprestimoId = service.handle(cmd);
+
+        // THEN
+        Emprestimo emprestimoSaved = repository.getOne(emprestimoId);
+
+        System.out.println(empresa.getSaldoAlocado());
+
+        assertNotNull(emprestimoSaved);
+        assertEquals(empresa.getSaldoAlocado(), valorEmprestimoLiberado, 2);
+        assertEquals(emprestimoId.toString(), emprestimoSaved.getId().toString());
+        assertEquals(SituacaoEmprestimo.LIBERADO, emprestimoSaved.getSituacao());
+        assertEquals( this.limiteEmpresa - valorEmprestimoLiberado, empresa.getContaLimiteAtual(), 2);
     }
 
     @Test

@@ -18,10 +18,7 @@ public class Emprestimo {
     private SituacaoEmprestimo situacao;
     private double valor;
     private final double porcentagemAprovacaoGerente = 25;
-
-    public Emprestimo() {
-        this.situacao = SituacaoEmprestimo.PENDENTE;
-    }
+   
 
     public void reprovar() {
         this.situacao = situacao.nextState(this);
@@ -33,6 +30,11 @@ public class Emprestimo {
 
     public void aguardarAprovacao() {
         this.situacao = situacao.nextState(this);
+    }
+    
+    public void aprovarEmprestimo() {
+        this.situacao = situacao.nextState(this);    
+        this.empresa.alocarSaldoConta(this.valor);
     }
 
     public void liberarEmprestimo() {
@@ -46,7 +48,7 @@ public class Emprestimo {
     }
 
     public double getValorMaximoSemAprovacaoGerente() {
-        return empresa.getContaLimite() * (porcentagemAprovacaoGerente / 100);
+        return empresa.getContaLimite() * (getPorcentagemAprovacaoGerente() / 100);
     }
 
     public boolean getIsSemLimiteDisponivel() {
@@ -60,5 +62,7 @@ public class Emprestimo {
     public boolean getIsAguardandoAprovacao() {
         return this.valor > getValorMaximoSemAprovacaoGerente();
     }
+
+    
 
 }

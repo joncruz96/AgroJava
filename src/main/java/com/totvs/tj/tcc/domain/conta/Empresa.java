@@ -130,12 +130,7 @@ public class Empresa {
         public Builder cnpj(String cnpj) {
             this.cnpj = cnpj;
             return this;
-        }
-
-        public Builder Conta(Conta conta) {
-            this.conta = conta;
-            return this;
-        }
+        }   
 
         public Builder numerosDeFuncionarios(int numerosDeFuncionarios) {
             this.numerosDeFuncionarios = numerosDeFuncionarios;
