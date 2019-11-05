@@ -174,6 +174,7 @@ public class EmprestimoTest {
 
         assertNotNull(emprestimoSaved);
         assertEquals(empresa.getSaldoAlocado(), valorEmprestimoLiberado, 2);
+        assertEquals(emprestimoId.toString(), emprestimoSaved.getId().toString());
         assertEquals(SituacaoEmprestimo.LIBERADO, emprestimoSaved.getSituacao());
     }
 

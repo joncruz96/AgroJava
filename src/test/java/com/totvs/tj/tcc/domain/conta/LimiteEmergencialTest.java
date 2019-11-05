@@ -65,7 +65,7 @@ public class LimiteEmergencialTest {
         service.handle(cmd);
 
         // THEN
-        assertEquals(repository.getOne(idEmpresa).getLimiteEmergencial(), limiteEmergencial, 0 );
+        assertEquals(repository.getOne(idEmpresa).getContaLimiteEmergencial(), limiteEmergencial, 0 );
               
        
     }
@@ -110,7 +110,7 @@ public class LimiteEmergencialTest {
         repository.save(this.empresa);
         
         // WHEN
-        service.handle(cmd);
+        service.handle(cmd);    
 
         // THEN
         //error.

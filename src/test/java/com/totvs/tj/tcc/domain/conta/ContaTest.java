@@ -59,10 +59,12 @@ public class ContaTest {
         assertNotNull(empresaSaved);
         
         assertEquals(empresaId, empresaSaved.getId());
+        assertEquals(empresaId.toString(), empresaSaved.getId().toString());
         assertEquals(responsavel, empresaSaved.getResponsavel());
+        assertEquals(responsavel.toString(), empresaSaved.getResponsavel().toString());
         assertEquals(valorMercadoEmpresaNormal * numerosDeFuncionariosLimite, empresaSaved.getContaLimite(), 0);
         assertEquals(0, empresaSaved.getContaSaldo(), 0);
-        
+                
 
     }
     
@@ -83,7 +85,7 @@ public class ContaTest {
                 .responsavel(responsavel)
                 .cnpj(cnpjEmpresa)
                 .numeroDeFuncionario(numerosDeFuncionariosLimite)
-                .valorMercadoEmpresa(numerosDeFuncionariosLimite)
+                .valorMercadoEmpresa(valorMercadoEmpresaLimite)
                 .build();
         
         //WHEN
@@ -102,37 +104,7 @@ public class ContaTest {
     }
     
     
-    /*
-   @Test
-    public void aoSolicitarAberturaConta() throws Exception {
-
-        // GIVEN
-        ContaRepository repository = new ContaRepositoryMock();
-        ContaApplicationService service = new ContaApplicationService(repository);
-        
-        Responsavel responsavel = Responsavel.builder()
-                .id(idResponsavel)                           
-            .build();
-        
-        Empresa empresa = Empresa.builder()
-                .id(idEmpresa)
-                .responsavel(responsavel)
-                .numerosDeFuncionarios(numerosDeFuncionarios)
-                .valorMercadoEmpresa(valorMercadoEmpresa)
-            .build();
-        
-        AbrirContaCommand cmd = AbrirContaCommand.builder()
-                .empresa(empresa)
-                .responsavel(idResponsavel)
-                .build();
-
-        // WHEN
-        ContaId idConta = service.handle(cmd);
-
-        // THEN
-        assertNotNull(idConta);
-    }
-
+    /*   
     @Test
     public void supenderUmaContaExistente() throws Exception {
 
